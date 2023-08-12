@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% if msg %}
+    <h3 style="color: green;">{{ msg }}</h3>
+    {% endif %}
+    <title>Service Request Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Service Requests</h1>
+        <table>
+            <tr>
+                <th>Request ID</th>
+                <th>Customer Username</th>
+                <th>Request Type</th>
+                <th>Request details</th>
+                <th>Status</th>
+                <th>Submission Date</th>
+                <th>Resolution Date</th>
+                <th>Action</th>
+                <th>Delete</th>
+            </tr>
+            {% if all_requests %}
+            {% for request in all_requests %}
+            <tr>
+                <td>{{ request.id }}</td>
+                <td>{{request.username}}</td>
+                <td>{{request.request_type}}</td>
+                <td>{{request.request_detail}}</td>
+                <td>{{ request.request_status }}</td>
+                <td>{{ request.request_time }} {{ request.request_date}}</td>
+                <td>
+                    <input type="date" name="resolution_date" value="{{ request.resolution_date }}">
+                </td>  
+                <td><form action="{% url 'response' request.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Send">
+                    </form>
+            </td>   
+            <form action="{% url 'service_delete' service.id %}" method="post">
+                {% csrf_token %}
+            <td><button class="delete-button">Delete</button></td>
+            </form>     
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+        <br>
+        <a href="{% url 'home' %}">Return to Home</a>
+
+    </div>
+</body>
+</html>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    
+    th, td {
+        padding: 10px;
+        text-align: left;
+    }
+    
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+    }
+    
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    tr:hover {
+        background-color: #ddd;
+    }
+</style>    
